@@ -1,12 +1,19 @@
 const express = require('express');
 const cors = require("cors");
 const uploadRoutes = require('./routes/uploadRoute');
+const app = express();
+const allowedOrigins = ['https://task-dashboard-alpha.vercel.app'];
+
 const corsOptions = {
-  origin: 'https://task-dashboard-alpha.vercel.app/',  // Allow only this origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);  // Allow the request
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
 };
 
-const app = express();
 app.use(cors(corsOptions));
 const PORT = 5252;
 
